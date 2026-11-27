@@ -72,11 +72,12 @@ def expected_cash_flows(plan: pd.DataFrame) -> pd.Series:
     horizon = MAX_AGE - int(plan["age"].min())
     t = np.arange(1, horizon + 1)
     total = np.zeros(horizon)
+    growth = (1.0 + indexation) ** t  # pension grows by (1 + i) each year
     for _, m in plan.iterrows():
         alive = survival_prob(m["age"], t)
         in_payment = (m["age"] + t) >= RETIREMENT_AGE
         within_table = (m["age"] + t) <= MAX_AGE
-        total += m["count"] * m["annual_benefit"] * alive * in_payment * within_table
+        total += m["count"] * m["annual_benefit"] * growth * alive * in_payment * within_table
     return pd.Series(total, index=pd.Index(t, name="year"), name="cash_flow")
 
 
