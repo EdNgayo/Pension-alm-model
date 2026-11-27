@@ -18,6 +18,7 @@ from pension_model import (
 
 BASE_RATE = 0.045          # flat discount rate
 INITIAL_FUNDED = 0.95      # assets = 95% of liabilities at the start
+INDEXATION = 0.02          # annual pension indexation
 SHOCKS_BP = [-200, -150, -100, -50, 0, 50, 100, 150, 200]
 OUT = Path("output")
 
@@ -27,7 +28,7 @@ def main():
 
     # Liabilities
     plan = make_sample_plan()
-    cfs = expected_cash_flows(plan)
+    cfs = expected_cash_flows(plan, indexation=INDEXATION)
     liab = present_value(cfs, BASE_RATE)
     pv = lambda r: present_value(cfs, r)
     d_l = effective_duration(pv, BASE_RATE)
