@@ -4,7 +4,7 @@ A small Python model of a defined benefit pension plan. It projects benefit paym
 
 I built it to understand asset-liability management (ALM) beyond the formulas: why a pension plan can lose ground when rates *fall* even if its assets go up, and what "matching" actually fixes.
 
-![Funded status under rate shocks](output/funded_status_shocks.png)
+![Funded status under rate shocks](funded_status_shocks.png)
 
 ## What the model does
 
@@ -12,11 +12,11 @@ I built it to understand asset-liability management (ALM) beyond the formulas: w
 2. **Expected cash flows.** Each payment is weighted by the probability the member is still alive, using the SOA Standard Ultimate Life Table (Makeham's law):
 
 $$
-\mu_x = A + B c^x, \qquad A = 0.00022,\; B = 2.7 \times 10^{-6},\; c = 1.124
+\mu_x = A + B c^x, \qquad A = 0.00022, \quad B = 2.7 \times 10^{-6}, \quad c = 1.124
 $$
 
 $$
-{}_tp_x = \exp\!\left(-At - \frac{B c^x (c^t - 1)}{\ln c}\right)
+{}_tp_x = \exp\left(-At - \frac{B c^x (c^t - 1)}{\ln c}\right)
 $$
 
 3. **Liability value.** Present value of expected payments at a flat rate $y = 4.5\%$:
@@ -28,8 +28,8 @@ $$
 4. **Duration and convexity.** Computed numerically by bumping the rate up and down by 1 bp:
 
 $$
-D = \frac{L(y - \Delta y) - L(y + \Delta y)}{2\,L(y)\,\Delta y}, \qquad
-C = \frac{L(y - \Delta y) + L(y + \Delta y) - 2L(y)}{L(y)\,\Delta y^2}
+D = \frac{L(y - \Delta y) - L(y + \Delta y)}{2 L(y) \Delta y}, \qquad
+C = \frac{L(y - \Delta y) + L(y + \Delta y) - 2L(y)}{L(y) \Delta y^2}
 $$
 
 5. **Two asset portfolios,** both starting at 95% funded:
@@ -37,7 +37,7 @@ $$
    - *Duration-matched:* 40% equity, with the bond sleeve split between a 5-year bond and a 30-year strip so that the assets' dollar duration equals the liability's:
 
 $$
-A_{FI}\big(w\,D_{long} + (1-w)\,D_{short}\big) = L \cdot D_L
+A_{FI} \left(w D_{long} + (1-w) D_{short}\right) = L \cdot D_L
 $$
 
 6. **Rate shocks.** Parallel shifts from -200 bp to +200 bp, recording assets, liability and funded ratio $A/L$ at each step.
@@ -61,7 +61,7 @@ $$
 | +100 | 105.3% | 94.7% |
 | +200 | 115.7% | 95.3% |
 
-Full output: [`output/summary.txt`](output/summary.txt) and [`output/shock_results.csv`](output/shock_results.csv).
+Full output: [`summary.txt`](summary.txt) and [`shock_results.csv`](shock_results.csv).
 
 ## What I took from it
 
@@ -70,7 +70,7 @@ Full output: [`output/summary.txt`](output/summary.txt) and [`output/shock_resul
 - **Getting to 100% hedged takes long bonds.** With 40% in equity, the bond sleeve needs a duration of about 24.5, which a 30-year coupon bond (duration about 16) can't reach. That is why plans use strips, long bonds or swaps.
 - **Duration alone isn't enough for big moves.** For a -200 bp shock, duration predicts +28.0% on the liability, the exact change is +35.8%, and adding convexity gets to +34.3%. The matched portfolio's small gains at both extremes come from the strip having more convexity than the liability.
 
-![Projected benefit cash flows](output/cash_flows.png)
+![Projected benefit cash flows](cash_flows.png)
 
 ## Simplifications
 
@@ -84,17 +84,20 @@ Full output: [`output/summary.txt`](output/summary.txt) and [`output/shock_resul
 
 ```bash
 pip install -r requirements.txt
-python run_analysis.py      # writes results and charts to output/
+python run_analysis.py      # writes fresh results and charts to output/
 python -m pytest            # 7 sanity checks
 ```
 
 ## Files
 
 ```
-pension_model.py     mortality, cash flows, PV, duration, bonds, portfolios, shocks
-run_analysis.py      runs the model, prints the summary, saves charts
-tests/test_model.py  checks (e.g. strip duration = T / (1 + y), matched DV01 = liability DV01)
-output/              charts, CSV and summary from the last run
+pension_model.py           mortality, cash flows, PV, duration, bonds, portfolios, shocks
+run_analysis.py            runs the model, prints the summary, saves charts
+test_model.py              checks (e.g. strip duration = T / (1 + y), matched DV01 = liability DV01)
+funded_status_shocks.png   chart: funded status vs rate shock
+cash_flows.png             chart: projected benefit payments
+shock_results.csv          full results table
+summary.txt                console output from the last run
 ```
 
 ## Next steps
