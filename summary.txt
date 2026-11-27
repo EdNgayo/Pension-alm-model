@@ -1,0 +1,35 @@
+================================================================
+LIABILITIES
+  Members: 1,192 (700 active, 492 retirees)
+  PV at 4.5%:        $243.2M
+  Effective duration:   13.98
+  Effective convexity:  317.3
+  DV01 (1 bp fall):     $340,291
+ASSETS (95% funded)
+  Current mix (55% equity)         DV01 $    75,803   hedge ratio 22%
+  Duration-matched (40% equity)    DV01 $   340,397   hedge ratio 100%
+  Matched bond sleeve: 83% in 30-year strip, 17% in 5-year bond (4%)
+FUNDED STATUS UNDER PARALLEL SHOCKS
+ shock (bp)  current mix  duration-matched
+       -200        75.2%             97.9%
+       -150        80.0%             96.9%
+       -100        85.0%             96.1%
+        -50        89.9%             95.5%
+          0        95.0%             95.0%
+         50       100.1%             94.8%
+        100       105.3%             94.7%
+        150       110.5%             94.9%
+        200       115.7%             95.3%
+DURATION APPROXIMATION vs EXACT (liability % change)
+ shock (bp)   exact  duration only  dur + convexity
+       -200 +35.79%        +27.95%          +34.30%
+       -150 +25.13%        +20.97%          +24.53%
+       -100 +15.73%        +13.98%          +15.56%
+        -50  +7.41%         +6.99%           +7.39%
+          0  +0.00%         -0.00%           +0.00%
+         50  -6.61%         -6.99%           -6.59%
+        100 -12.53%        -13.98%          -12.39%
+        150 -17.86%        -20.97%          -17.40%
+        200 -22.66%        -27.95%          -21.61%
+================================================================
+Saved results and charts to /home/claude/pension-alm-model/output
