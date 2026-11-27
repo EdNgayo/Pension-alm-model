@@ -64,7 +64,7 @@ def make_sample_plan() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def expected_cash_flows(plan: pd.DataFrame) -> pd.Series:
+def expected_cash_flows(plan: pd.DataFrame, indexation: float = 0.0) -> pd.Series:
     """
     Expected benefit payments for years t = 1, 2, ..., paid at the end of
     each year while the member is alive and at least 65.
